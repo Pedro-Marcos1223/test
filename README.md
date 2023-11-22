@@ -1,18 +1,33 @@
 SELECT 
     CONCAT(
-        SUBSTRING_INDEX(nm_descricao, 'Total reclamações', 1),
+        LEFT(nm_descricao, CHARINDEX('Total reclamações', nm_descricao) - 1),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Total reclamações:', -1), 'Data do evento:', 1),
+        SUBSTRING(nm_descricao, 
+                   CHARINDEX('Total reclamações:', nm_descricao) + LEN('Total reclamações:'), 
+                   CHARINDEX('Data do evento:', nm_descricao) - CHARINDEX('Total reclamações:', nm_descricao) - LEN('Total reclamações:')
+                  ),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Data do evento:', -1), 'Impacto:', 1),
+        SUBSTRING(nm_descricao, 
+                   CHARINDEX('Data do evento:', nm_descricao) + LEN('Data do evento:'), 
+                   CHARINDEX('Impacto:', nm_descricao) - CHARINDEX('Data do evento:', nm_descricao) - LEN('Data do evento:')
+                  ),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Impacto:', -1), 'Classe ofenssora:', 1),
+        SUBSTRING(nm_descricao, 
+                   CHARINDEX('Impacto:', nm_descricao) + LEN('Impacto:'), 
+                   CHARINDEX('Classe ofenssora:', nm_descricao) - CHARINDEX('Impacto:', nm_descricao) - LEN('Impacto:')
+                  ),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Classe ofenssora:', -1), 'Time resp:', 1),
+        SUBSTRING(nm_descricao, 
+                   CHARINDEX('Classe ofenssora:', nm_descricao) + LEN('Classe ofenssora:'), 
+                   CHARINDEX('Time resp:', nm_descricao) - CHARINDEX('Classe ofenssora:', nm_descricao) - LEN('Classe ofenssora:')
+                  ),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Time resp:', -1), 'Incidentes:', 1),
+        SUBSTRING(nm_descricao, 
+                   CHARINDEX('Time resp:', nm_descricao) + LEN('Time resp:'), 
+                   CHARINDEX('Incidentes:', nm_descricao) - CHARINDEX('Time resp:', nm_descricao) - LEN('Time resp:')
+                  ),
         ' ',
-        SUBSTRING_INDEX(SUBSTRING_INDEX(nm_descricao, 'Incidentes:', -1), 'Total reclamações:', -1)
+        RIGHT(nm_descricao, LEN(nm_descricao) - CHARINDEX('Incidentes:', nm_descricao) + 1)
     ) AS nm_descricao_calculado
 FROM 
     sua_tabela;
