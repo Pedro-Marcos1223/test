@@ -1,33 +1,33 @@
 SELECT 
     CONCAT(
-        LEFT(nm_descricao, CHARINDEX('Total reclamações', nm_descricao) - 1),
+        CASE WHEN CHARINDEX('Total reclamações', nm_descricao) > 0 THEN LEFT(nm_descricao, CHARINDEX('Total reclamações', nm_descricao) - 1) ELSE '' END,
         ' ',
-        SUBSTRING(nm_descricao, 
+        CASE WHEN CHARINDEX('Total reclamações:', nm_descricao) > 0 AND CHARINDEX('Data do evento:', nm_descricao) > 0 THEN SUBSTRING(nm_descricao, 
                    CHARINDEX('Total reclamações:', nm_descricao) + LEN('Total reclamações:'), 
                    CHARINDEX('Data do evento:', nm_descricao) - CHARINDEX('Total reclamações:', nm_descricao) - LEN('Total reclamações:')
-                  ),
+                  ) ELSE '' END,
         ' ',
-        SUBSTRING(nm_descricao, 
+        CASE WHEN CHARINDEX('Data do evento:', nm_descricao) > 0 AND CHARINDEX('Impacto:', nm_descricao) > 0 THEN SUBSTRING(nm_descricao, 
                    CHARINDEX('Data do evento:', nm_descricao) + LEN('Data do evento:'), 
                    CHARINDEX('Impacto:', nm_descricao) - CHARINDEX('Data do evento:', nm_descricao) - LEN('Data do evento:')
-                  ),
+                  ) ELSE '' END,
         ' ',
-        SUBSTRING(nm_descricao, 
+        CASE WHEN CHARINDEX('Impacto:', nm_descricao) > 0 AND CHARINDEX('Classe ofenssora:', nm_descricao) > 0 THEN SUBSTRING(nm_descricao, 
                    CHARINDEX('Impacto:', nm_descricao) + LEN('Impacto:'), 
                    CHARINDEX('Classe ofenssora:', nm_descricao) - CHARINDEX('Impacto:', nm_descricao) - LEN('Impacto:')
-                  ),
+                  ) ELSE '' END,
         ' ',
-        SUBSTRING(nm_descricao, 
+        CASE WHEN CHARINDEX('Classe ofenssora:', nm_descricao) > 0 AND CHARINDEX('Time resp:', nm_descricao) > 0 THEN SUBSTRING(nm_descricao, 
                    CHARINDEX('Classe ofenssora:', nm_descricao) + LEN('Classe ofenssora:'), 
                    CHARINDEX('Time resp:', nm_descricao) - CHARINDEX('Classe ofenssora:', nm_descricao) - LEN('Classe ofenssora:')
-                  ),
+                  ) ELSE '' END,
         ' ',
-        SUBSTRING(nm_descricao, 
+        CASE WHEN CHARINDEX('Time resp:', nm_descricao) > 0 AND CHARINDEX('Incidentes:', nm_descricao) > 0 THEN SUBSTRING(nm_descricao, 
                    CHARINDEX('Time resp:', nm_descricao) + LEN('Time resp:'), 
                    CHARINDEX('Incidentes:', nm_descricao) - CHARINDEX('Time resp:', nm_descricao) - LEN('Time resp:')
-                  ),
+                  ) ELSE '' END,
         ' ',
-        RIGHT(nm_descricao, LEN(nm_descricao) - CHARINDEX('Incidentes:', nm_descricao) + 1)
+        CASE WHEN CHARINDEX('Incidentes:', nm_descricao) > 0 THEN RIGHT(nm_descricao, LEN(nm_descricao) - CHARINDEX('Incidentes:', nm_descricao) + 1) ELSE '' END
     ) AS nm_descricao_calculado
 FROM 
     sua_tabela;
